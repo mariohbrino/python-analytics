@@ -20,7 +20,7 @@ ruff format .
 
 Run tests.
 ```bash
-python -m pytest
+python -m pytest -v --cov
 ```
 
-> Add flag `--cov` to show test coverage.
+> Use flag `--cov` to show test coverage.
