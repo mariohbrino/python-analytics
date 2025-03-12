@@ -22,3 +22,5 @@ Run tests.
 ```bash
 python -m pytest
 ```
+
+> Add flag `--cov` to show test coverage.
