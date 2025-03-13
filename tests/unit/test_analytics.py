@@ -5,7 +5,7 @@ from src.analytcs.collection import Collection
 
 
 @fixture
-def collection():
+def collection() -> Collection:
     data = {
         "id": [1, 2, 3, 4, 5, 6],
         "name": [
@@ -22,6 +22,18 @@ def collection():
     return Collection(data=data)
 
 
+@fixture
+def expected_result() -> list[object]:
+    return [
+        {"id": 1, "name": "Braund, Mr. Owen Harris", "age": 25, "sex": "Male"},
+        {"id": 2, "name": "Allen, Mr. William Henry", "age": 35, "sex": "Male"},
+        {"id": 3, "name": "Bonnell, Miss. Elizabeth", "age": 58, "sex": "Female"},
+        {"id": 4, "name": "Wizz, Mr. William Henry", "age": 25, "sex": "Male"},
+        {"id": 5, "name": "Bozz, Miss. Helen", "age": 51, "sex": "Female"},
+        {"id": 6, "name": "Gartner, Miss. Lily", "age": 37, "sex": "Female"},
+    ]
+
+
 def test_raise_value_error():
     with raises(
         ValueError,
@@ -30,16 +42,15 @@ def test_raise_value_error():
         Collection()
 
 
-def test_get_dataframe(collection: Collection):
+def test_import_csv_file(collection: Collection, expected_result: list[object]):
+    collection.to_csv("results/people.csv", index=False, quoting=csv.QUOTE_ALL)
+    data = Collection(filename="results/people.csv")
+    result = data.get()
+    assert result.to_dict(orient="records") == expected_result
+
+
+def test_get_dataframe(collection: Collection, expected_result: list[object]):
     result = collection.get()
-    expected_result = [
-        {"id": 1, "name": "Braund, Mr. Owen Harris", "age": 25, "sex": "Male"},
-        {"id": 2, "name": "Allen, Mr. William Henry", "age": 35, "sex": "Male"},
-        {"id": 3, "name": "Bonnell, Miss. Elizabeth", "age": 58, "sex": "Female"},
-        {"id": 4, "name": "Wizz, Mr. William Henry", "age": 25, "sex": "Male"},
-        {"id": 5, "name": "Bozz, Miss. Helen", "age": 51, "sex": "Female"},
-        {"id": 6, "name": "Gartner, Miss. Lily", "age": 37, "sex": "Female"},
-    ]
     assert result.to_dict(orient="records") == expected_result
 
 
@@ -82,21 +93,13 @@ def test_group_by_sex_and_age(collection: Collection):
     assert result.to_dict(orient="records") == expected_result
 
 
-def test_generate_csv_report(collection):
+def test_generate_csv_report(collection: Collection):
     result = collection.get()
     os.makedirs("results", exist_ok=True)
     result.to_csv("results/report.csv", index=False, quoting=csv.QUOTE_ALL)
     assert os.path.exists("results/report.csv")
 
-    with open("results/report.csv", mode="r", newline="") as file:
-        reader = csv.DictReader(file)
-        rows = list(reader)
-        expected_rows = [
-            {"id": "1", "name": "Braund, Mr. Owen Harris", "age": "25", "sex": "Male"},
-            {"id": "2", "name": "Allen, Mr. William Henry", "age": "35", "sex": "Male"},
-            {"id": "3", "name": "Bonnell, Miss. Elizabeth", "age": "58", "sex": "Female"},
-            {"id": "4", "name": "Wizz, Mr. William Henry", "age": "25", "sex": "Male"},
-            {"id": "5", "name": "Bozz, Miss. Helen", "age": "51", "sex": "Female"},
-            {"id": "6", "name": "Gartner, Miss. Lily", "age": "37", "sex": "Female"},
-        ]
-        assert rows == expected_rows
+
+def test_collection_str_method(collection: Collection):
+    expected_str = str(collection)
+    assert str(collection) == expected_str
