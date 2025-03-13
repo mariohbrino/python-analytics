@@ -1,3 +1,5 @@
+import csv
+import os
 from pytest import fixture, raises
 from src.analytcs.collection import Collection
 
@@ -49,3 +51,57 @@ def test_find_by_name_on_dataframe(collection: Collection):
 def test_cannot_find_by_name_on_dataframe(collection: Collection):
     result = collection.find(column="name", value="Doe, John")
     assert not result.isin(["Doe, John"]).any().any()
+
+
+def test_order_by_assending_dataframe(collection: Collection):
+    result = collection.order_by(column="name", ascending=True)
+    assert result.iloc[0]["name"] == "Allen, Mr. William Henry"
+
+
+def test_order_by_dessending_dataframe(collection: Collection):
+    result = collection.order_by(column="name", ascending=False)
+    assert result.iloc[0]["name"] == "Wizz, Mr. William Henry"
+
+
+def test_order_by_with_arrange_dataframe(collection: Collection):
+    result = collection.order_by(
+        column="name", arrange=["id", "age", "sex", "name"], ascending=False
+    )
+    assert result.iloc[0]["name"] == "Wizz, Mr. William Henry"
+
+
+def test_group_by_sex_and_age(collection: Collection):
+    result = collection.group_by(column=["sex", "age"])
+    expected_result = [
+        {"sex": "Female", "age": 37, "count": 1},
+        {"sex": "Female", "age": 51, "count": 1},
+        {"sex": "Female", "age": 58, "count": 1},
+        {"sex": "Male", "age": 25, "count": 2},
+        {"sex": "Male", "age": 35, "count": 1},
+    ]
+    assert result.to_dict(orient="records") == expected_result
+
+
+def test_generate_csv_report(collection):
+    result = collection.get()
+    os.makedirs("results", exist_ok=True)
+    result.to_csv("results/report.csv", index=False, quoting=csv.QUOTE_ALL)
+    assert os.path.exists("results/report.csv")
+
+    with open("results/report.csv", mode="r", newline="") as file:
+        reader = csv.DictReader(file)
+        rows = list(reader)
+        expected_rows = [
+            {"id": "1", "name": "Braund, Mr. Owen Harris", "age": "25", "sex": "Male"},
+            {"id": "2", "name": "Allen, Mr. William Henry", "age": "35", "sex": "Male"},
+            {
+                "id": "3",
+                "name": "Bonnell, Miss. Elizabeth",
+                "age": "58",
+                "sex": "Female",
+            },
+            {"id": "4", "name": "Wizz, Mr. William Henry", "age": "25", "sex": "Male"},
+            {"id": "5", "name": "Bozz, Miss. Helen", "age": "51", "sex": "Female"},
+            {"id": "6", "name": "Gartner, Miss. Lily", "age": "37", "sex": "Female"},
+        ]
+        assert rows == expected_rows
