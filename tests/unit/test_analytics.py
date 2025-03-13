@@ -94,12 +94,7 @@ def test_generate_csv_report(collection):
         expected_rows = [
             {"id": "1", "name": "Braund, Mr. Owen Harris", "age": "25", "sex": "Male"},
             {"id": "2", "name": "Allen, Mr. William Henry", "age": "35", "sex": "Male"},
-            {
-                "id": "3",
-                "name": "Bonnell, Miss. Elizabeth",
-                "age": "58",
-                "sex": "Female",
-            },
+            {"id": "3", "name": "Bonnell, Miss. Elizabeth", "age": "58", "sex": "Female"},
             {"id": "4", "name": "Wizz, Mr. William Henry", "age": "25", "sex": "Male"},
             {"id": "5", "name": "Bozz, Miss. Helen", "age": "51", "sex": "Female"},
             {"id": "6", "name": "Gartner, Miss. Lily", "age": "37", "sex": "Female"},
