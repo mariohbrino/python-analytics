@@ -1,7 +1,7 @@
 import csv
 import os
 from pytest import fixture, raises
-from src.analytcs.collection import Collection
+from analytcs.collection import Collection
 
 
 @fixture
