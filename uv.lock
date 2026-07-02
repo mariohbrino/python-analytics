@@ -200,40 +200,48 @@ name = "python-analytics"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
-    { name = "coverage" },
     { name = "exceptiongroup" },
     { name = "iniconfig" },
     { name = "numpy" },
     { name = "packaging" },
     { name = "pandas" },
     { name = "pluggy" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
     { name = "python-dateutil" },
     { name = "pytz" },
-    { name = "ruff" },
     { name = "six" },
     { name = "tomli" },
     { name = "tzdata" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "coverage" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+
 [package.metadata]
 requires-dist = [
-    { name = "coverage", specifier = ">=7.14.3" },
     { name = "exceptiongroup", specifier = "==1.2.2" },
     { name = "iniconfig", specifier = "==2.0.0" },
     { name = "numpy", specifier = "==2.2.3" },
     { name = "packaging", specifier = "==24.2" },
     { name = "pandas", specifier = "==2.2.3" },
     { name = "pluggy", specifier = "==1.5.0" },
-    { name = "pytest", specifier = "==9.0.3" },
-    { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "python-dateutil", specifier = "==2.9.0.post0" },
     { name = "pytz", specifier = "==2025.1" },
-    { name = "ruff", specifier = "==0.9.10" },
     { name = "six", specifier = "==1.17.0" },
     { name = "tomli", specifier = "==2.2.1" },
     { name = "tzdata", specifier = "==2025.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "coverage", specifier = ">=7.14.3" },
+    { name = "pytest", specifier = "==9.0.3" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "ruff", specifier = "==0.9.10" },
 ]
 
 [[package]]
