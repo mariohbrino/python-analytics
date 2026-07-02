@@ -41,9 +41,7 @@ class Collection:
         """
         return self.__dataframe[self.__dataframe[column] == value]
 
-    def order_by(
-        self, column: list[str] | str, arrange: list[str] = None, ascending: bool = True
-    ) -> DataFrame:
+    def order_by(self, column: list[str] | str, arrange: list[str] = None, ascending: bool = True) -> DataFrame:
         """
         Order the dataframe by a column.
             :param column: str: Column name to order.

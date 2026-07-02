@@ -1,6 +1,8 @@
 import csv
 import os
+
 from pytest import fixture, raises
+
 from analytcs.collection import Collection
 
 
@@ -75,9 +77,7 @@ def test_order_by_dessending_dataframe(collection: Collection):
 
 
 def test_order_by_with_arrange_dataframe(collection: Collection):
-    result = collection.order_by(
-        column="name", arrange=["id", "age", "sex", "name"], ascending=False
-    )
+    result = collection.order_by(column="name", arrange=["id", "age", "sex", "name"], ascending=False)
     assert result.iloc[0]["name"] == "Wizz, Mr. William Henry"
 
 

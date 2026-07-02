@@ -1,6 +1,7 @@
-from argparse import ArgumentParser
-from logging import basicConfig, INFO, getLogger
 import csv
+from argparse import ArgumentParser
+from logging import INFO, basicConfig, getLogger
+
 from analytcs.collection import Collection
 
 basicConfig(level=INFO)
@@ -23,20 +24,14 @@ def main():
 
     # Subcommand: group_by
     group_parser = subparsers.add_parser("group_by", help="Group data by columns")
-    group_parser.add_argument(
-        "--columns", nargs="+", help="Columns to group by", required=True
-    )
+    group_parser.add_argument("--columns", nargs="+", help="Columns to group by", required=True)
     group_parser.add_argument("--output", help="Output CSV file", required=True)
 
     # Subcommand: order_by
     order_parser = subparsers.add_parser("order_by", help="Order data by a column")
     order_parser.add_argument("--column", help="Column to order by", required=True)
-    order_parser.add_argument(
-        "--arrange", nargs="+", help="Columns arrangement", required=True
-    )
-    order_parser.add_argument(
-        "--ascending", action="store_true", help="Sort in ascending order"
-    )
+    order_parser.add_argument("--arrange", nargs="+", help="Columns arrangement", required=True)
+    order_parser.add_argument("--ascending", action="store_true", help="Sort in ascending order")
     order_parser.add_argument("--output", help="Output CSV file", required=True)
 
     args = parser.parse_args()
@@ -62,9 +57,7 @@ def main():
             results.to_csv(args.output, index=False, quoting=csv.QUOTE_ALL)
 
         case "order_by":
-            results = collection.order_by(
-                column=args.column, arrange=args.arrange, ascending=args.ascending
-            )
+            results = collection.order_by(column=args.column, arrange=args.arrange, ascending=args.ascending)
             print(results)
             results.to_csv(args.output, index=False, quoting=csv.QUOTE_ALL)
 
