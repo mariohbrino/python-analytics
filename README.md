@@ -1,11 +1,20 @@
 # Python Pandas Example
 
-Create virtual environment and activate. Then, install python dependencies.
+## Set Up Environment
+
+Install UV package managment
 ```bash
-python3 -m venv .venv
+pip install uv
+```
+
+Create virtual environment and activate. Then, install project in editable mode.
+```bash
+uv sync
 source .venv/bin/activate
 pip install -e .
 ```
+
+## CLI Usage
 
 Run application.
 ```bash
@@ -15,11 +24,15 @@ analyze group_by --columns sex age --output results/group_results.csv
 analyze order_by --column age --arrange id age sex name --ascending --output results/order_results.csv
 ```
 
+## Development
+
 Linting check and format for python using Ruff.
 ```bash
 ruff check .
 ruff format .
 ```
+
+## Testing
 
 Run tests.
 ```bash
