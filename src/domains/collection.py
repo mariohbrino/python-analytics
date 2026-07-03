@@ -1,3 +1,5 @@
+from typing import List
+
 from pandas import DataFrame, read_csv
 
 
@@ -8,7 +10,11 @@ class Collection:
 
     __dataframe: DataFrame | None = None
 
-    def __init__(self, filename: str = None, data: dict[object] = None) -> None:
+    def __init__(
+        self,
+        filename: str = None,
+        data: dict[object] = None,
+    ) -> None:
         """
         Initialize the class with the csv file or data
             :param filename: str: Path to the csv file.
@@ -33,18 +39,27 @@ class Collection:
         """
         return self.__dataframe
 
-    def find(self, column: list[str] | str, value: str) -> DataFrame:
+    def find(
+        self,
+        columns: List[str] | str,
+        value: str,
+    ) -> DataFrame:
         """
         Find a value in a column of the dataframe.
-            :param column: str: Column name to search.
+            :param columns: list[str] | str: Column name to search.
             :param value: str: Value to search.
         """
-        return self.__dataframe[self.__dataframe[column] == value]
+        return self.__dataframe[self.__dataframe[columns] == value]
 
-    def order_by(self, column: list[str] | str, arrange: list[str] = None, ascending: bool = True) -> DataFrame:
+    def order_by(
+        self,
+        columns: List[str] | str,
+        arrange: List[str] = None,
+        ascending: bool = True,
+    ) -> DataFrame:
         """
         Order the dataframe by a column.
-            :param column: str: Column name to order.
+            :param columns: list[str] | str: Column(s) name to order.
             :param arrange: list[str]: Arrange order of columns.
             :param ascending: bool: Order ascending or descending.
         """
@@ -54,24 +69,20 @@ class Collection:
         if arrange:
             data = data[arrange]
         if ascending:
-            return data.sort_values(by=column, ascending=True)
-        return data.sort_values(by=column, ascending=False)
+            return data.sort_values(by=columns, ascending=True)
+        return data.sort_values(by=columns, ascending=False)
 
-    def group_by(self, column: list[str] | str, label: str = "count") -> DataFrame:
+    def group_by(
+        self,
+        columns: List[str] | str,
+        label: str = "count",
+    ) -> DataFrame:
         """
         Group the dataframe by a column and add a label for the aggregated column.
-            :param column: str: Column name to group.
+            :param columns: list[str] | str: Column(s) name to group.
             :param label: str: Label for the aggregated column.
         """
-        return self.__dataframe.groupby(column).size().reset_index(name=label)
-
-    def to_csv(self, *args, **kwargs) -> None:
-        """
-        Save the dataframe to a csv file.
-            :param args: Additional positional arguments for pandas to_csv method.
-            :param kwargs: Additional keyword arguments for pandas to_csv method.
-        """
-        self.__dataframe.to_csv(*args, **kwargs)
+        return self.__dataframe.groupby(columns).size().reset_index(name=label)
 
     def __str__(self) -> str:
         """

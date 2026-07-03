@@ -3,7 +3,7 @@ import os
 
 from pytest import fixture, raises
 
-from analytcs.collection import Collection
+from domains.collection import Collection
 
 
 @fixture
@@ -44,45 +44,38 @@ def test_raise_value_error():
         Collection()
 
 
-def test_import_csv_file(collection: Collection, expected_result: list[object]):
-    collection.to_csv("results/people.csv", index=False, quoting=csv.QUOTE_ALL)
-    data = Collection(filename="results/people.csv")
-    result = data.get()
-    assert result.to_dict(orient="records") == expected_result
-
-
 def test_get_dataframe(collection: Collection, expected_result: list[object]):
     result = collection.get()
     assert result.to_dict(orient="records") == expected_result
 
 
 def test_find_by_name_on_dataframe(collection: Collection):
-    result = collection.find(column="name", value="Bonnell, Miss. Elizabeth")
+    result = collection.find(columns="name", value="Bonnell, Miss. Elizabeth")
     assert result.isin(["Bonnell, Miss. Elizabeth"]).any().any()
 
 
 def test_cannot_find_by_name_on_dataframe(collection: Collection):
-    result = collection.find(column="name", value="Doe, John")
+    result = collection.find(columns="name", value="Doe, John")
     assert not result.isin(["Doe, John"]).any().any()
 
 
 def test_order_by_assending_dataframe(collection: Collection):
-    result = collection.order_by(column="name", ascending=True)
+    result = collection.order_by(columns="name", ascending=True)
     assert result.iloc[0]["name"] == "Allen, Mr. William Henry"
 
 
 def test_order_by_dessending_dataframe(collection: Collection):
-    result = collection.order_by(column="name", ascending=False)
+    result = collection.order_by(columns="name", ascending=False)
     assert result.iloc[0]["name"] == "Wizz, Mr. William Henry"
 
 
 def test_order_by_with_arrange_dataframe(collection: Collection):
-    result = collection.order_by(column="name", arrange=["id", "age", "sex", "name"], ascending=False)
+    result = collection.order_by(columns="name", arrange=["id", "age", "sex", "name"], ascending=False)
     assert result.iloc[0]["name"] == "Wizz, Mr. William Henry"
 
 
 def test_group_by_sex_and_age(collection: Collection):
-    result = collection.group_by(column=["sex", "age"])
+    result = collection.group_by(columns=["sex", "age"])
     expected_result = [
         {"sex": "Female", "age": 37, "count": 1},
         {"sex": "Female", "age": 51, "count": 1},
