@@ -9,7 +9,10 @@ help: # Show a list of commands available.
 install: # Install dependencies.
 	@pip install -e .
 
-lint: # Run python linting format.
+lint: # Run python linting.
+	@ruff check .
+
+format: # Run python linting format.
 	@ruff format .
 
 test: # Run all tests.
